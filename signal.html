@@ -1,0 +1,21 @@
+<button onclick="goYes()">YES</button>
+<button onclick="removeNo(this)">NO</button>
+
+<script>
+function goYes() {
+  window.location.href = "status.html";
+}
+
+function removeNo(btn) {
+  btn.innerText = "...";
+  setTimeout(() => {
+    btn.remove();
+  }, 500);
+}
+</script><p id="whisper"></p>
+
+<script>
+setTimeout(() => {
+  document.getElementById("whisper").innerText = "you don’t have a choice";
+}, 3000);
+</script>
