@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>log_0686</title>
+
+  <style>
+    body {
+      background-color: black;
+      color: #ff2a2a;
+      font-family: monospace;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      letter-spacing: 3px;
+    }
+
+    .entry {
+      margin-top: 40px;
+      white-space: pre-line;
+    }
+
+    .flicker {
+      animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 class="flicker">[LOG_0686]</h1>
+
+  <div id="log"></div>
+
+  <script>
+   
+    const entries = [
+`date: unknown
+journal entry 1
+"it started as a signal. it shouldn't have responded."`,
+
+`date: unknown
+journal entry 2
+"i tried to shut it down. it reacted."`,
+
+`date: unknown
+journal entry 3
+"it knows when i leave. it waits."`
+    ];
+
+    const logContainer = document.getElementById("log");
+
+    let entryIndex = 0;
+
+    function typeEntry(text, callback) {
+      let div = document.createElement("div");
+      div.className = "entry";
+      logContainer.appendChild(div);
+
+      let i = 0;
+
+      function typeChar() {
+        if (i < text.length) {
+          div.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typeChar, 25); // typing speed
+        } else {
+          if (callback) callback();
+        }
+      }
+
+      typeChar();
+    }
+
+    function startLogs() {
+      if (entryIndex < entries.length) {
+        typeEntry(entries[entryIndex], () => {
+          entryIndex++;
+          setTimeout(startLogs, 1000); // delay between entries
+        });
+      }
+    }
+
+    startLogs();
+  </script>
+
+</body>
+</html>
