@@ -31,7 +31,6 @@
       100% { opacity: 1; }
     }
 
-    
     #unlockBtn {
       display: block;
       margin: 60px auto;
@@ -48,7 +47,6 @@
       border-color: red;
     }
 
-    
     #log {
       display: none;
     }
@@ -59,13 +57,11 @@
 
   <h1 class="flicker">[LOG_0686]</h1>
 
-  
   <button id="unlockBtn" onclick="unlockLogs()">continue</button>
 
   <div id="log"></div>
 
-  <!-- audio -->
-  <audio id="creepyAudio" src="audio.mp3"></audio>
+  <audio id="creepyAudio" src="creepy.mp3"></audio>
 
   <script>
    
@@ -89,80 +85,72 @@ journal entry 4
 
     const logContainer = document.getElementById("log");
 
-    let entryIndex = 0;
+    let entryDivs = [];
 
-    function typeEntry(text, callback) {
+    // 👁️ create entries (headers visible, content hidden)
+    entries.forEach(entry => {
+      let lines = entry.split("\n");
+
       let div = document.createElement("div");
       div.className = "entry";
+
+      // header
+      div.innerHTML = lines[0] + "\n" + lines[1];
+
+      // hidden content span
+      let content = document.createElement("div");
+      content.innerHTML = "";
+      div.appendChild(document.createElement("br"));
+      div.appendChild(content);
+
       logContainer.appendChild(div);
 
-      let i = 0;
+      entryDivs.push(content);
+    });
 
-      function typeChar() {
-        if (i < text.length) {
-          div.innerHTML += text.charAt(i);
-          i++;
-          setTimeout(typeChar, 25);
-        } else {
-          if (callback) callback();
-        }
-      }
-
-      typeChar();
-    }
-
-    function startLogs() {
-      if (entryIndex < entries.length) {
-        typeEntry(entries[entryIndex], () => {
-          entryIndex++;
-          setTimeout(startLogs, 1000);
-        });
-      }
-    }
-
-    
+    // 👁️ WORD SYNC PER ENTRY
     const script = [
-      { time: 4.0, word: "it's" },
-      { time: 4.5, word: "reacting" },
-      { time: 5.0, word: "when" },
-      { time: 5.3, word: "i" },
-      { time: 5.6, word: "go" }
+      // ENTRY 1
+      { time: 4.0, word: "\"it's", entry: 1 },
+      { time: 4.5, word: "reacting", entry: 1 },
+      { time: 5.0, word: "when", entry: 1 },
+      { time: 5.3, word: "i", entry: 1 },
+      { time: 5.6, word: "go", entry: 1 },
+      
+      // ENTRY 2
+      { time: 10.0, word: "\"This", entry: 2 },
+      { time: 10.5, word: "infection", entry: 2 },
+      { time: 11.0, word: "is", entry: 2 },
+
+      // ENTRY 3
+      { time: 18.0, word: "\"Dangit!", entry: 3 },
+
+      // ENTRY 4
+      { time: 25.0, word: "\"new", entry: 4 }
     ];
 
     const audio = document.getElementById("creepyAudio");
-
     let currentIndex = 0;
 
-    
-    let syncedDiv = document.createElement("div");
-    syncedDiv.className = "entry";
-    syncedDiv.style.display = "none";
-    logContainer.appendChild(syncedDiv);
-
-    
     audio.addEventListener("timeupdate", () => {
       while (
         currentIndex < script.length &&
         audio.currentTime >= script[currentIndex].time
       ) {
-        syncedDiv.innerHTML += script[currentIndex].word + " ";
+        let part = script[currentIndex];
+        entryDivs[part.entry].innerHTML += part.word + " ";
         currentIndex++;
       }
     });
 
-    
     function unlockLogs() {
       document.getElementById("unlockBtn").style.display = "none";
       document.getElementById("log").style.display = "block";
 
-      syncedDiv.style.display = "block"; 
-
-      const audio = document.getElementById("creepyAudio");
       audio.volume = 0.7;
       audio.play();
-
-      // ❌ startLogs();  
     }
+
   </script>
 
 </body>
