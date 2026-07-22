@@ -30,6 +30,28 @@
       50% { opacity: 0.4; }
       100% { opacity: 1; }
     }
+
+    
+    #unlockBtn {
+      display: block;
+      margin: 60px auto;
+      background: black;
+      color: #550000;
+      border: 1px solid #220000;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+
+    #unlockBtn:hover {
+      color: red;
+      border-color: red;
+    }
+
+    
+    #log {
+      display: none;
+    }
   </style>
 </head>
 
@@ -37,27 +59,32 @@
 
   <h1 class="flicker">[LOG_0686]</h1>
 
+  
+  <button id="unlockBtn" onclick="unlockLogs()">continue</button>
+
   <div id="log"></div>
+
+  <!-- audio -->
+  <audio id="creepyAudio" src="audio/creepy.mp3"></audio>
 
   <script>
    
     const entries = [
 `date: unknown
 journal entry 1
-"it started through the cameras. it shouldn't have responded when i tried to talk to it."`,
+"it's reacting when i go through the pages. i guess it doesn't like when i continue on."`,
 
 `date: unknown
 journal entry 2
-"i tried to stop it. it laughed as it infected more people."`,
+"This infection is spreading fast, theres gotta be a way to stop it. i remember it all starting, YouTube and everything else like it got hacked. now, every time you post, you get infected. i don't know how, but it's fatal"`,
 
 `date: unknown
 journal entry 3
-"it knows when i leave. it watches it's victims."`,
+"Dangit! it already claimed some victims! to my understanding, it already got yub, markiplier, and jmancurly. how long will it be until we find a way to stop it? "`,
 
 `date: unknown
 journal entry 4
-"new disturbing discovery. some vessels enter a hunt mode, to where they get tired of waiting and start choosing"`
-      
+"new disturbing discovery: First, the good news. jimmyhere, stanleymov, and technoblade are still alive. Now the discovery. It took sr.pelo and he is now missing. i'll try to gather the people that are still alive and try to find survivors."`
     ];
 
     const logContainer = document.getElementById("log");
@@ -75,7 +102,7 @@ journal entry 4
         if (i < text.length) {
           div.innerHTML += text.charAt(i);
           i++;
-          setTimeout(typeChar, 25); // typing speed
+          setTimeout(typeChar, 25);
         } else {
           if (callback) callback();
         }
@@ -88,12 +115,59 @@ journal entry 4
       if (entryIndex < entries.length) {
         typeEntry(entries[entryIndex], () => {
           entryIndex++;
-          setTimeout(startLogs, 1000); // delay between entries
+          setTimeout(startLogs, 1000);
         });
       }
     }
 
-    startLogs();
+    
+    const script = [
+      { time: 0.5, word: "date:" },
+      { time: 1.0, word: "unknown" },
+      { time: 2.0, word: "journal" },
+      { time: 2.4, word: "entry" },
+      { time: 2.8, word: "1" },
+      { time: 4.0, word: "\"it's" },
+      { time: 4.5, word: "reacting" },
+      { time: 5.0, word: "when" },
+      { time: 5.3, word: "i" },
+      { time: 5.6, word: "go" }
+    ];
+
+    const audio = document.getElementById("creepyAudio");
+
+    let currentIndex = 0;
+
+    
+    let syncedDiv = document.createElement("div");
+    syncedDiv.className = "entry";
+    syncedDiv.style.display = "none";
+    logContainer.appendChild(syncedDiv);
+
+    
+    audio.addEventListener("timeupdate", () => {
+      while (
+        currentIndex < script.length &&
+        audio.currentTime >= script[currentIndex].time
+      ) {
+        syncedDiv.innerHTML += script[currentIndex].word + " ";
+        currentIndex++;
+      }
+    });
+
+    
+    function unlockLogs() {
+      document.getElementById("unlockBtn").style.display = "none";
+      document.getElementById("log").style.display = "block";
+
+      syncedDiv.style.display = "block"; 
+
+      const audio = document.getElementById("creepyAudio");
+      audio.volume = 0.7;
+      audio.play();
+
+      // ❌ startLogs();  
+    }
   </script>
 
 </body>
