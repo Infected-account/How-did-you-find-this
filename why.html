@@ -57,7 +57,8 @@
 
   <h1 class="flicker">[LOG_0686]</h1>
 
-  <button id="unlockBtn" ="unlockLogs()">continue</button>
+  <!-- ✅ FIXED BUTTON -->
+  <button id="unlockBtn" onclick="unlockLogs()">continue</button>
 
   <div id="log"></div>
 
@@ -72,32 +73,21 @@ journal entry 1
 
 `date: unknown
 journal entry 2
-"This infection is spreading fast, theres gotta be a way to stop it. i remember it all starting, YouTube and everything else like it got hacked. now, every time you post, you get infected. i don't know how, but it's fatal"`,
-
-`date: unknown
-journal entry 3
-"Dangit! it already claimed some victims! to my understanding, it already got yub, markiplier, and jmancurly. how long will it be until we find a way to stop it? "`,
-
-`date: unknown
-journal entry 4
-"new disturbing discovery: First, the good news. jimmyhere, stanleymov, and technoblade are still alive. Now the discovery. It took sr.pelo and he is now missing. i'll try to gather the people that are still alive and try to find survivors."`
+"This infection is spreading fast..."`
     ];
 
     const logContainer = document.getElementById("log");
 
     let entryDivs = [];
 
-    // 👁️ create entries (headers visible, content hidden)
     entries.forEach(entry => {
       let lines = entry.split("\n");
 
       let div = document.createElement("div");
       div.className = "entry";
 
-      // header
       div.innerHTML = lines[0] + "\n" + lines[1];
 
-      // hidden content span
       let content = document.createElement("div");
       content.innerHTML = "";
       div.appendChild(document.createElement("br"));
@@ -108,29 +98,27 @@ journal entry 4
       entryDivs.push(content);
     });
 
-    // 👁️ WORD SYNC PER ENTRY
+    // ✅ FIXED SCRIPT ARRAY
     const script = [
-      // ENTRY 1    [
-{ time: 0.5, word: "\"it's", entry: 0 },
-{ time: 0.9, word: "reacting", entry: 0 },
-{ time: 1.4, word: "when", entry: 0 },
-{ time: 1.7, word: "i", entry: 0 },
-{ time: 2.0, word: "go", entry: 0 },
-{ time: 2.3, word: "through", entry: 0 },
-{ time: 2.8, word: "the", entry: 0 },
-{ time: 3.1, word: "pages.", entry: 0 },
+      { time: 0.5, word: "\"it's", entry: 0 },
+      { time: 0.9, word: "reacting", entry: 0 },
+      { time: 1.4, word: "when", entry: 0 },
+      { time: 1.7, word: "i", entry: 0 },
+      { time: 2.0, word: "go", entry: 0 },
+      { time: 2.3, word: "through", entry: 0 },
+      { time: 2.8, word: "the", entry: 0 },
+      { time: 3.1, word: "pages.", entry: 0 },
 
-{ time: 4.2, word: "i", entry: 0 },
-{ time: 4.5, word: "guess", entry: 0 },
-{ time: 4.9, word: "it", entry: 0 },
-{ time: 5.2, word: "doesn't", entry: 0 },
-{ time: 5.7, word: "like", entry: 0 },
-{ time: 6.1, word: "when", entry: 0 },
-{ time: 6.4, word: "i", entry: 0 },
-{ time: 6.7, word: "continue", entry: 0 },
-{ time: 7.2, word: "on.\"", entry: 0 },
-
-
+      { time: 4.2, word: "i", entry: 0 },
+      { time: 4.5, word: "guess", entry: 0 },
+      { time: 4.9, word: "it", entry: 0 },
+      { time: 5.2, word: "doesn't", entry: 0 },
+      { time: 5.7, word: "like", entry: 0 },
+      { time: 6.1, word: "when", entry: 0 },
+      { time: 6.4, word: "i", entry: 0 },
+      { time: 6.7, word: "continue", entry: 0 },
+      { time: 7.2, word: "on.\"", entry: 0 }
+    ];
 
     const audio = document.getElementById("creepyAudio");
     let currentIndex = 0;
@@ -151,7 +139,9 @@ journal entry 4
       document.getElementById("log").style.display = "block";
 
       audio.volume = 0.7;
-      audio.play();
+      audio.play().catch(() => {
+        console.log("Audio blocked until interaction (normal)");
+      });
     }
 
   </script>
