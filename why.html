@@ -57,15 +57,12 @@
 
   <h1 class="flicker">[LOG_0686]</h1>
 
-  <!-- ✅ FIXED BUTTON -->
   <button id="unlockBtn" onclick="unlockLogs()">continue</button>
 
   <div id="log"></div>
 
-  <audio id="creepyAudio" src="creepy.mp3"></audio>
-
   <script>
-   
+
     const entries = [
 `date: unknown
 journal entry 1
@@ -73,75 +70,46 @@ journal entry 1
 
 `date: unknown
 journal entry 2
-"This infection is spreading fast..."`
+"This infection is spreading fast. theres gotta be a way to stop it. i remember it all starting. Youtube, and everything else like it all got hacked. Now, every time you post, you get infected. i don't know how. but it's fatal."`
     ];
 
     const logContainer = document.getElementById("log");
 
-    let entryDivs = [];
+    function typeText(element, text, speed = 35, callback) {
+      let i = 0;
 
-    entries.forEach(entry => {
-      let lines = entry.split("\n");
+      function typing() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        } else if (callback) {
+          callback();
+        }
+      }
+
+      typing();
+    }
+
+    function typeEntriesSequentially(index = 0) {
+      if (index >= entries.length) return;
 
       let div = document.createElement("div");
       div.className = "entry";
-
-      div.innerHTML = lines[0] + "\n" + lines[1];
-
-      let content = document.createElement("div");
-      content.innerHTML = "";
-      div.appendChild(document.createElement("br"));
-      div.appendChild(content);
-
       logContainer.appendChild(div);
 
-      entryDivs.push(content);
-    });
-
-    // ✅ FIXED SCRIPT ARRAY
-   const script = [
-{ time: 0.07, word: "\"it's", entry: 0 },
-{ time: 0.86, word: "reacting", entry: 0 },
-{ time: 1.05, word: "when", entry: 0 },
-{ time: 1.54, word: "i", entry: 0 },
-{ time: 1.80, word: "go", entry: 0 },
-{ time: 2.20, word: "through", entry: 0 },
-{ time: 2.31, word: "the", entry: 0 },
-{ time: 2.63, word: "pages.", entry: 0 },
-
-{ time: 4.03, word: "i", entry: 0 },
-{ time: 4.23, word: "guess", entry: 0 },
-{ time: 4.35, word: "it", entry: 0 },
-{ time: 4.46, word: "doesn't", entry: 0 },
-{ time: 4.78, word: "like", entry: 0 },
-{ time: 4.94, word: "when", entry: 0 },
-{ time: 5.08, word: "i", entry: 0 },
-{ time: 5.30, word: "continue", entry: 0 },
-{ time: 5.77, word: "on.\"", entry: 0 },
-];
-
-    const audio = document.getElementById("creepyAudio");
-    let currentIndex = 0;
-
-    audio.addEventListener("timeupdate", () => {
-      while (
-        currentIndex < script.length &&
-        audio.currentTime >= script[currentIndex].time
-      ) {
-        let part = script[currentIndex];
-        entryDivs[part.entry].innerHTML += part.word + " ";
-        currentIndex++;
-      }
-    });
+      typeText(div, entries[index], 35, () => {
+        setTimeout(() => {
+          typeEntriesSequentially(index + 1);
+        }, 800); // pause between entries
+      });
+    }
 
     function unlockLogs() {
       document.getElementById("unlockBtn").style.display = "none";
       document.getElementById("log").style.display = "block";
 
-      audio.volume = 0.7;
-      audio.play().catch(() => {
-        console.log("Audio blocked until interaction (normal)");
-      });
+      typeEntriesSequentially();
     }
 
   </script>
